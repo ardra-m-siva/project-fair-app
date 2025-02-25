@@ -1,15 +1,31 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import langingImg from '../assets/homeimage2.webp'
 import ProjectCard from '../components/ProjectCard'
 import { Card } from 'react-bootstrap'
+import { getHomeProjectApi } from '../services/allApi'
 
 const Home = () => {
-  const navigate=useNavigate()
-  const handleProjects=()=>{
-    if(sessionStorage.getItem('token')){
+  const [homeProjects, setHomeProjects] = useState([])
+  const navigate = useNavigate()
+  useEffect(() => {
+    getAllHomeProjects()
+  }, [])
+
+  const getAllHomeProjects = async () => {
+    try {
+      const result = await getHomeProjectApi()
+      setHomeProjects(result.data)
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+
+  const handleProjects = () => {
+    if (sessionStorage.getItem('token')) {
       navigate('projects')
-    }else{
+    } else {
       alert("Please Login")
     }
   }
@@ -38,8 +54,13 @@ const Home = () => {
       <div className='mt-5 text-center'>
         <h1 className='mb-2'>Explore Our Projects</h1>
         <marquee behavior="" direction="">
-          <div className='me-5'>
-            <ProjectCard />
+          <div className='d-flex'>
+            {homeProjects?.map(project => (
+              <div className='me-5'>
+                <ProjectCard displayData={project} />
+              </div>
+            ))
+          }
           </div>
         </marquee>
         <button onClick={handleProjects} className='btn btn-link mt-5'>CLICK HERE TO VIEW MORE PROJECTS..</button>
