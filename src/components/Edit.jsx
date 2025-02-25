@@ -2,11 +2,11 @@ import React, { useContext, useEffect, useState } from 'react'
 import { Button, Modal } from 'react-bootstrap'
 import serverUrl from '../services/serverUrl';
 import { editProjectsApi } from '../services/allApi';
-import { addResponseImageContext } from '../context/ContextApi';
+import { editResponseImageContext } from '../context/ContextApi';
 
 
 const Edit = ({ project }) => {
-  // const {updatedProjectImage,setUpdateProjectImage} =useContext(addResponseImageContext)
+  const {editProjectResponse, setEditProjectResponse} =useContext(editResponseImageContext)
   const [show, setShow] = useState(false);
   const [preview, setPreview] = useState("")
   const [imageFileStatus, setImageFileStatus] = useState(false)
@@ -65,6 +65,7 @@ const Edit = ({ project }) => {
           if (result.status == 200) {
             alert("Project Added successfully")
             handleClose()
+            setEditProjectResponse(result)
           }
         } catch (err) {
           console.log(err);

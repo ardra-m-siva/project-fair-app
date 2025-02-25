@@ -2,17 +2,17 @@ import React, { useContext, useEffect, useState } from 'react'
 import Add from './Add'
 import Edit from './Edit'
 import { userProjectsApi } from '../services/allApi'
-import { addResponseContext, addResponseImageContext } from '../context/ContextApi'
+import { addResponseContext, editResponseImageContext } from '../context/ContextApi'
 
 const View = () => {
   const [userProjects, setUserProjects] = useState([])
 
   const {addProjectResponse, setAddProjectResponse}=useContext(addResponseContext)
-  // const {updatedProjectImage,setUpdateProjectImage} =useContext(addResponseImageContext)
+  const {editProjectResponse, setEditProjectResponse } =useContext(editResponseImageContext)
 
   useEffect(() => {
     getUserProjects()
-  }, [addProjectResponse])
+  }, [addProjectResponse,editProjectResponse])
 
   const getUserProjects = async () => {
     const token = sessionStorage.getItem("token")

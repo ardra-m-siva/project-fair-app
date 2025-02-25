@@ -1,15 +1,15 @@
 import React, { createContext, useState } from 'react'
 export const addResponseContext = createContext()
-export const addResponseImageContext = createContext()
+export const editResponseImageContext = createContext()
 const ContextApi = ({ children }) => {
     const [addProjectResponse, setAddProjectResponse] = useState("")
-    const [updateProjectImage, setUpdateProjectImage] = useState("")
+    const [editProjectResponse, setEditProjectResponse] = useState("")
     return (
-        <addResponseImageContext.Provider value={{ updateProjectImage, setUpdateProjectImage }} >
+        <editResponseImageContext.Provider value={{ editProjectResponse, setEditProjectResponse }} >
             <addResponseContext.Provider value={{ addProjectResponse, setAddProjectResponse }}>
                 {children}
             </addResponseContext.Provider>
-        </addResponseImageContext.Provider>
+        </editResponseImageContext.Provider>
     )
 }
 
