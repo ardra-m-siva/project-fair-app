@@ -1,18 +1,18 @@
 import React, { useContext, useEffect, useState } from 'react'
 import Add from './Add'
 import Edit from './Edit'
-import { userProjectsApi } from '../services/allApi'
+import { removeProjectsApi, userProjectsApi } from '../services/allApi'
 import { addResponseContext, editResponseImageContext } from '../context/ContextApi'
 
 const View = () => {
   const [userProjects, setUserProjects] = useState([])
 
-  const {addProjectResponse, setAddProjectResponse}=useContext(addResponseContext)
-  const {editProjectResponse, setEditProjectResponse } =useContext(editResponseImageContext)
+  const { addProjectResponse, setAddProjectResponse } = useContext(addResponseContext)
+  const { editProjectResponse, setEditProjectResponse } = useContext(editResponseImageContext)
 
   useEffect(() => {
     getUserProjects()
-  }, [addProjectResponse,editProjectResponse])
+  }, [addProjectResponse, editProjectResponse])
 
   const getUserProjects = async () => {
     const token = sessionStorage.getItem("token")
@@ -28,6 +28,22 @@ const View = () => {
       } catch (err) {
         console.log(err);
 
+      }
+    }
+  }
+
+  const deleteProject =async (id) => {
+    const token = sessionStorage.getItem("token")
+    if (token) {
+      const reqHeaders = {
+        "Authorization": `Bearer ${token}`
+      }
+      try{
+        await removeProjectsApi(id,reqHeaders)
+        getUserProjects()
+      }catch(err){
+        console.log(err);
+        
       }
     }
   }
@@ -48,7 +64,7 @@ const View = () => {
                 <div className="d-flex align-items-center">
                   <div className='btn'><Edit project={project} /></div>
                   <div className="btn"><a target='_blank' href={project?.github}><i className='fa-brands fa-github'></i></a></div>
-                  <button className='btn text-danger'><i className='fa-solid fa-trash'></i></button>
+                  <button onClick={() => deleteProject(project?._id)} className='btn text-danger'><i className='fa-solid fa-trash'></i></button>
                 </div>
               </div>
             )) :
