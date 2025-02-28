@@ -1,17 +1,25 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import Header from '../components/Header'
 import View from '../components/View'
 import Profile from '../components/Profile'
+import { tokenAuthContext } from '../context/AuthContextApi'
 
 const Dashboard = () => {
-  const [username,setUsername]=useState("")
-  useEffect(()=>{
-    if(sessionStorage.getItem("user")){
+  const { isAuthorized, setIsAuthorized } = useContext(tokenAuthContext)
+
+  const [username, setUsername] = useState("")
+  useEffect(() => {
+    if (sessionStorage.getItem("token")) {
+      setIsAuthorized(true)
+    } else {
+      setIsAuthorized(false)
+    }
+    if (sessionStorage.getItem("user")) {
       setUsername(JSON.parse(sessionStorage.getItem("user")).username.split(" ")[0])
-    }else{
+    } else {
       setUsername("")
     }
-  },[])
+  }, [])
   return (
     <>
       <Header insideDashboard={true} />

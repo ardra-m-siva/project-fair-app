@@ -1,27 +1,34 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import Header from '../components/Header'
 import { Col, Row } from 'react-bootstrap'
 import ProjectCard from '../components/ProjectCard'
 import { allProjectsApi } from '../services/allApi'
+import { tokenAuthContext } from '../context/AuthContextApi'
 
 const Projects = () => {
-  
-  const [searchKey,setSearchKey]=useState("")
+  const { isAuthorized, setIsAuthorized } = useContext(tokenAuthContext)
+
+  const [searchKey, setSearchKey] = useState("")
   const [allProjects, setAllProjects] = useState([])
   useEffect(() => {
+    if (sessionStorage.getItem("token")) {
+      setIsAuthorized(true)
+    } else {
+      setIsAuthorized(false)
+    }
     getAllProjects()
   }, [searchKey])
 
   const getAllProjects = async () => {
-    const token = sessionStorage.getItem("token")    
+    const token = sessionStorage.getItem("token")
     if (token) {
       const reqHeaders = {
         "Authorization": `Bearer ${token}`
       }
       try {
-        const result = await allProjectsApi(searchKey,reqHeaders)
+        const result = await allProjectsApi(searchKey, reqHeaders)
         console.log(result);
-        
+
         if (result.status == 200) {
           setAllProjects(result.data)
         }
@@ -37,7 +44,7 @@ const Projects = () => {
       <div style={{ paddingTop: '100px' }} className='container-fluid'>
         <div className="d-flex justify-content-between">
           <h1>All projects</h1>
-          <input onChange={e=>setSearchKey(e.target.value)} type="text" placeholder='Search projects by their Languages' className='form-control w-25' />
+          <input onChange={e => setSearchKey(e.target.value)} type="text" placeholder='Search projects by their Languages' className='form-control w-25' />
         </div>
         <Row className='mt-3'>
           {
@@ -49,7 +56,7 @@ const Projects = () => {
               ))
               :
               <div className='text-danger fw-bolder'>Project not found!!!</div>
-            }
+          }
         </Row>
       </div>
     </div>

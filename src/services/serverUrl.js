@@ -1,2 +1,2 @@
-const serverUrl = "http://localhost:3000"
+const serverUrl = "https://project-fair-server-kdhf.onrender.com"
 export default serverUrl

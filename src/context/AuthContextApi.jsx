@@ -1,9 +1,9 @@
-import React, { Children, createContext, useEffect, useState } from 'react'
+import React, {  createContext, useEffect, useState } from 'react'
 export const tokenAuthContext = createContext()
-const AuthContextApi = ({ Children }) => {
+const AuthContextApi = ({ children }) => {
     const [isAuthorized, setIsAuthorized] = useState(false)
     useEffect(() => {
-        if (sessionStorage.setItem("token")) {
+        if (sessionStorage.getItem("token")) {
             setIsAuthorized(true)
         } else {
             setIsAuthorized(false)
@@ -11,7 +11,7 @@ const AuthContextApi = ({ Children }) => {
     }, [isAuthorized])
     return (
         <tokenAuthContext.Provider value={{ isAuthorized, setIsAuthorized }}>
-            {Children}
+            {children}
         </tokenAuthContext.Provider>
     )
 }
